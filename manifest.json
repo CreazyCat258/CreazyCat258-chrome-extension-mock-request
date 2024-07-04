@@ -1,0 +1,43 @@
+{
+  "name": "Request Mock",
+  "version": "1.0.0",
+  "manifest_version": 3,
+  "author": "yanze",
+  "description": "拦截指定的网络请求，并返回修改后的响应数据",
+  "icons": {
+    "16": "images/icon16.png",
+    "48": "images/icon48.png",
+    "128": "images/icon128.png"
+  },
+  "permissions": [
+    "contextMenus",
+    "tabs",
+    "activeTab",
+    "storage",
+    "scripting"
+  ],
+  "host_permissions": [
+    "http://*/",
+    "https://*/"
+  ],
+  "background": {
+    "service_worker": "service_worker.js",
+    "type": "module"
+  },
+  "action": {},
+  "options_ui": {
+    "page": "options/index.html",
+    "open_in_tab": true
+  },
+  "devtools_page": "devtools/index.html",
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "panel/dist/index.html"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
+  ]
+}
