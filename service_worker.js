@@ -14,9 +14,9 @@ chrome.action.onClicked.addListener((tab) => {
   // 创建/聚焦 操作面板窗口（单例）
   if (panelWindowId) {
     chrome.windows.update(panelWindowId, { focused: true }, (win) => {
-      if(!win){
+      if (!win) {
         createPanelWindow();
-      }else if (chrome.runtime.lastError ) {
+      } else if (chrome.runtime.lastError) {
         console.log(chrome.runtime.lastError.message);
       }
     });
@@ -28,7 +28,15 @@ chrome.action.onClicked.addListener((tab) => {
 
 // 监听来自 window 的消息
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  console.log('监听windows消息',message)
+  if (message.action === 'pluginStatusChange') {
+    console.log('background——插件状态变化', message)
+    if (message.payload.checked) {
+      enableExtension()
+    } else {
+      disableExtension()
+    }
+    sendResponse({ result: true });
+  }
 });
 
 
@@ -50,4 +58,34 @@ function createPanelWindow() {
   } catch (error) {
     console.log('创建窗口错误', error)
   }
+}
+
+// 启用插件
+function enableExtension() {
+  console.log('开启插件')
+  // 设置角标文本和背景颜色
+  chrome.action.setBadgeText({ text: 'ON' });
+  chrome.action.setBadgeBackgroundColor({ color: '#00FF00' }); // 绿色背景
+
+  // 在这里添加启用插件的逻辑，比如注入内容脚本等
+  // chrome.scripting.executeScript({
+  //     target: { allFrames: true },
+  //     files: ['content.js']
+  // });
+}
+
+// 禁用插件
+function disableExtension() {
+  console.log('关闭插件')
+  // 设置角标文本和背景颜色
+  chrome.action.setBadgeText({ text: 'OFF' });
+  chrome.action.setBadgeBackgroundColor({ color: '#FF0000' }); // 红色背景
+
+  // 在这里添加禁用插件的逻辑，比如移除内容脚本等
+  // 注意：无法直接移除已注入的脚本，可以通过消息传递来通知内容脚本停止工作
+  // chrome.tabs.query({}, function(tabs) {
+  //     for (let tab of tabs) {
+  //         chrome.tabs.sendMessage(tab.id, { action: "stopWorking" });
+  //     }
+  // });
 }
