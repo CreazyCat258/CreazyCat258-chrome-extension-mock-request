@@ -26,6 +26,12 @@ chrome.action.onClicked.addListener((tab) => {
 
 });
 
+// 监听来自 window 的消息
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  console.log('监听windows消息',message)
+});
+
+
 
 // 创建面板窗口
 function createPanelWindow() {
