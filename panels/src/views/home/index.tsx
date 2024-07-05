@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Switch } from 'antd';
+import { chromeStorageSet, chromeRuntimeSendMessage } from '../../utils/chromeApi'
 import styles from './index.module.scss';
 
 const Home: React.FC = () => {
@@ -8,24 +9,25 @@ const Home: React.FC = () => {
 
   // 插件开关状态变化
   const handlePluginSwitchChange = (checked: boolean) => {
-    if (chrome?.storage?.local) {
-      chrome.storage.local.set({ pluginSwitch: checked }, function () {
-
+    chromeStorageSet(
+      { pluginSwitch: checked },
+      () => {
         console.log(`切换到 ${checked}`);
-        // 通知 service_worker，进行相关响应
-        if (chrome?.runtime) {
-          chrome.runtime.sendMessage({ action: 'pluginStatusChange', payload: { checked } }, function (response) {
+        chromeRuntimeSendMessage(
+          { action: 'pluginStatusChange', payload: { checked } },
+          (response) => {
             console.log('插件状态:', response.result);
-            if(response.result){
+            if (response.result) {
               setPluginEnabled(checked)
             }
-          });
-        }
-
-      });
-    } else {
-      console.log('storage is not available');
-    }
+          }
+        )
+      },
+      () => {
+        console.log('设置开关状态', checked)
+        setPluginEnabled(checked)
+      }
+    )
   };
 
 
