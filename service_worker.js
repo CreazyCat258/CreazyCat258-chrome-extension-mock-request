@@ -4,15 +4,6 @@ let panelWindowId = null;
 // 【事件监听】插件安装/更新
 chrome.runtime.onInstalled.addListener(() => {
   console.log("插件-安装")
-  // 页面邮件菜单，添加菜单项
-  chrome.contextMenus.create({
-    "id": "sampleContextMenu",
-    "title": "RequestMock插件",
-    "contexts": ["page"],
-  });
-
-  // 设置弹窗页面
-  // chrome.action.setPopup({ popup: 'popup/index.html' });
 });
 
 // 【事件监听】浏览区工具栏点击插件
@@ -40,7 +31,7 @@ chrome.action.onClicked.addListener((tab) => {
 function createPanelWindow() {
   try {
     chrome.windows.create({
-      url: "./panel/dist/index.html",
+      url: "./panels/dist/index.html",
       type: "panel",
     }, (win) => {
       panelWindowId = win.id;

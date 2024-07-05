@@ -25,15 +25,10 @@
     "type": "module"
   },
   "action": {},
-  "options_ui": {
-    "page": "options/index.html",
-    "open_in_tab": true
-  },
-  "devtools_page": "devtools/index.html",
   "web_accessible_resources": [
     {
       "resources": [
-        "panel/dist/index.html"
+        "panels/dist/index.html"
       ],
       "matches": [
         "<all_urls>"
